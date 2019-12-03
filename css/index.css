@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* 根font-size: 100px */
+html {
+    font-size: 625%;
+}
+
+a {
+    text-decoration: none;
+    out-line: none;
+    color: #000;
+}
+
+img {
+    display: block;
+}
+
+.container {
+    background: #fff;
+}
+
+.hidden_nav {
+    position: relative;
+    top: .3rem;
+    height: 0;
+    overflow: hidden;
+}
+
+/* 清除浮动 */
+.clear {
+    *zoom: 1;
+}
+
+.clear::after {
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+.content-list {
+    width: 98%;
+    margin: 0 auto;
+    padding: 0 1%;
+    font-size: .16rem;
+    text-align: center;
+}
+
+.list-item {
+    float: left;
+    margin: 2% 1%;
+    width: 31.333%;
+}

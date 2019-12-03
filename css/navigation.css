@@ -1,0 +1,33 @@
+.nav_bar {
+    position: relative;
+    width: 100%;
+    z-index: 99;
+    background: inherit;
+}
+
+.nav_bar_content {
+    margin: 10px auto;
+    width: 96%;
+    font-size: 0;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nav_bar_item {
+    display: inline-block;
+    width: 150px;
+    font-size: 16px;
+    line-height: 32px;
+    color: #000;
+}
+
+.nav_bar_item.linkActive {
+    background: #fff;
+    border-bottom: 2px solid #c3b87b;
+    box-shadow: 1px 1px 3px rgba(34, 25, 25, 0.2);
+}
+
