@@ -22,13 +22,6 @@ img {
     background: #fff;
 }
 
-.hidden_nav {
-    position: relative;
-    top: .3rem;
-    height: 0;
-    overflow: hidden;
-}
-
 /* 清除浮动 */
 .clear {
     *zoom: 1;

@@ -24,13 +24,6 @@ window.onload = function () {
         $(this).html(html);
     });
 
-    // 虚拟位置
-    var nav_height = $('.nav_bar').outerHeight();
-    $('.hidden_nav').each(function () {
-        $(this).css({ 'top': '-.1rem' });
-        // $(this).css({ 'top': -(nav_height * .4 - 5) });
-    });
-
     var nav = new navigation({
         container: "#container",
         nav_bar: "#nav_bar",
