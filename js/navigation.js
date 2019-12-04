@@ -30,11 +30,9 @@
                 $(element).attr('data-navIndex', index);
                 self.temlist.push($(element).offset().top);
             });
-            // 遍历导航栏按钮,并为其添加index,保存其坐标位置
-            self.temNavList = [];
+            // 遍历导航栏按钮,并为其添加index
             $(ele_nav).children().eq(0).find('.nav_bar_item').each(function (index, element) {
                 $(element).attr('data-navIndex', index);
-                self.temNavList.push($(element).width());
             });
             // 监听滚动事件,更新虚拟坐标位置
             $(window).scroll(function () {
@@ -47,9 +45,8 @@
         },
         // 导航栏水平滑动
         onScrollLevel: function (ele_nav, ele_width, window) {
-            // 监听滚动事件,更新导航栏按钮位置坐标,并使当前按钮在可视范围内
+            // 监听滚动事件,并使当前按钮在可视范围内
             $(window).scroll(function () {
-                self.temNavList = [];
                 var activityIndex = null;
                 activityIndex = Number($('.linkActive').eq(0).attr('data-navIndex')) + 1;
                 if (activityIndex != null) {
