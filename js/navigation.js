@@ -21,7 +21,7 @@
 
     // 原型链上提供的方法
     navigation.prototype = {
-        // 导航栏点击事件
+        // 导航栏初始设置
         navInit: function (ele_nav, ele_container, window) {
             // 遍历页面虚拟坐标,并为其添加index,保存其坐标位置
             self.temlist = [];
@@ -85,8 +85,8 @@
                 }
             });
         },
+        // 导航栏按钮点击事件
         navClick: function (ele_nav) {
-            // 为导航栏按钮添加点击事件
             $(ele_nav).children().eq(0).find('.nav_bar_item').on('click', function () {
                 var obj = $(this);
                 var temlocation;
