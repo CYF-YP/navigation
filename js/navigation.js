@@ -22,12 +22,10 @@
     navigation.prototype = {
         // 导航栏初始设置
         navInit: function (ele_nav, ele_container, window) {
-            // 遍历页面虚拟坐标,并为其添加index,保存其坐标位置
-            self.temlist = [];
+            // 遍历页面虚拟坐标,并为其添加index
             $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
                 $(element).addClass('hidden_nav');
                 $(element).attr('data-navIndex', index);
-                self.temlist.push($(element).offset().top);
             });
             // 遍历导航栏按钮,并为其添加index
             $(ele_nav).children().eq(0).find('.nav_bar_item').each(function (index, element) {
@@ -57,6 +55,7 @@
         },
         // 内容竖直方向滑动
         onScrollVertical: function (ele_nav, ele_width, window) {
+            var _this = this;
             // 监听滚动事件
             $(window).scroll(function () {
                 var top = $(window).scrollTop();
@@ -78,7 +77,7 @@
                     $(ele_nav).css({ 'position': 'relative', 'top': 'auto', 'z-index': 9 });
                     $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
                 }
-                navigation.prototype.onScrollLevel(ele_nav, ele_width);
+                _this.onScrollLevel(ele_nav, ele_width);
             });
         },
         // 导航栏按钮点击事件
