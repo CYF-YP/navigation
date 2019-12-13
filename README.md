@@ -29,7 +29,7 @@
 var nav = new navigation({
     container: "#container",    // 外层容器id
     nav_bar: "#nav_bar",    // 导航栏id
-    "ele_width": 150    // 导航项宽度
+    ele_width: 150    // 导航项宽度
 });
 ```
 ###### navigation.css说明
