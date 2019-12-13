@@ -62,7 +62,6 @@
                 if (top >= ($(ele_nav).prev().outerHeight() + $(ele_nav).prev().offset().top)) {
                     $(ele_nav).css({ 'position': 'fixed', 'top': '0', 'z-index': 99 });
                     self.temlist.map(function (value, index, arr) {
-                        // 10为设置的多的偏移量,防止刚刚好滑到这个地方时出错
                         if (value <= top + $(ele_nav).outerHeight()) {
                             if (index != arr.length - 1) {
                                 if (self.temlist[index + 1] > top + $(ele_nav).outerHeight()) {
