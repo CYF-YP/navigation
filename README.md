@@ -10,7 +10,9 @@
 ### 2.使用
 ###### html文件中导入js文件、css文件
     其中Jquery文件当前使用版本为3.4.0
+    
     导航项的对应内容处需要加自定义属性:data-anchor="true"
+    
     导航栏的class和id最好固定为以下示例,尤其是class
 ```
 <div class="nav_bar" id="nav_bar">
