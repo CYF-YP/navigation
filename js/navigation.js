@@ -14,9 +14,8 @@
         self.ele_width = self.ele_width;
 
         self.navInit(self.nav_bar, self.container, window);
-        self.onScrollVertical(self.nav_bar, window);
-        self.onScrollLevel(self.nav_bar, self.ele_width, window);
-        self.navClick(self.nav_bar);
+        self.onScrollVertical(self.nav_bar, self.ele_width, window);
+        self.navClick(self.nav_bar, self.container, window);
     }
 
     // 原型链上提供的方法
@@ -38,30 +37,26 @@
             $(window).scroll(function () {
                 self.temlist = [];
                 $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
-                    $(element).attr('data-navIndex', index);
                     self.temlist.push($(element).offset().top);
                 });
             });
         },
         // 导航栏水平滑动
-        onScrollLevel: function (ele_nav, ele_width, window) {
-            // 监听滚动事件,并使当前按钮在可视范围内
-            $(window).scroll(function () {
-                var activityIndex = null;
-                activityIndex = Number($('.linkActive').eq(0).attr('data-navIndex')) + 1;
-                if (activityIndex != null) {
-                    // $(ele_nav).children().eq(0).scrollLeft((activityIndex - 1) * ele_width);
-                    var timer = setTimeout(function () {
-                        $(ele_nav).children().eq(0).stop().animate({
-                            scrollLeft: (activityIndex - 1) * ele_width + 'px'
-                        }, 'fast', 'linear');
-                        clearTimeout(timer);
-                    }, 100);
-                }
-            });
+        onScrollLevel: function (ele_nav, ele_width) {
+            var activityIndex = null;
+            activityIndex = Number($('.linkActive').eq(0).attr('data-navIndex')) + 1;
+            if (activityIndex != null) {
+                // $(ele_nav).children().eq(0).scrollLeft((activityIndex - 1) * ele_width);
+                var timer = setTimeout(function () {
+                    $(ele_nav).children().eq(0).stop().animate({
+                        scrollLeft: (activityIndex - 1) * ele_width + 'px'
+                    }, 'fast', 'linear');
+                    clearTimeout(timer);
+                }, 100);
+            }
         },
         // 内容竖直方向滑动
-        onScrollVertical: function (ele_nav, window) {
+        onScrollVertical: function (ele_nav, ele_width, window) {
             // 监听滚动事件
             $(window).scroll(function () {
                 var top = $(window).scrollTop();
@@ -83,17 +78,28 @@
                     $(ele_nav).css({ 'position': 'relative', 'top': 'auto', 'z-index': 9 });
                     $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
                 }
+                navigation.prototype.onScrollLevel(ele_nav, ele_width);
             });
         },
         // 导航栏按钮点击事件
-        navClick: function (ele_nav) {
+        navClick: function (ele_nav, ele_container, window) {
             $(ele_nav).children().eq(0).find('.nav_bar_item').on('click', function () {
                 var obj = $(this);
                 var temlocation;
                 if (obj.attr('data-navIndex') == 0) {
                     temlocation = 0;
                 } else {
-                    temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() + 5;
+                    self.lastActiveIndex = $('.linkActive').eq(0).attr('data-navIndex');
+                    if (self.lastActiveIndex == 0 && $(window).scrollTop() <= ($(ele_nav).prev().outerHeight() + $(ele_nav).prev().offset().top)) {
+                        self.temlist = [];
+                        $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
+                            self.temlist.push($(element).offset().top);
+                        });
+                        // *3:原先nav存在文档流中,滑动以后nav脱离了文档流,底下的内容顶上但是要滑到相同的位置所以*2,又因为nav固定在顶部遮挡了内容所以*3(猜的)
+                        temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() * 3 + 5;
+                    } else {
+                        temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() + 5;
+                    }
                 }
                 var timer = setTimeout(function () {
                     $('body,html').stop().animate({
