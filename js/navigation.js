@@ -22,6 +22,8 @@
     navigation.prototype = {
         // 导航栏初始设置
         navInit: function (ele_nav, ele_container, window) {
+            // 导航栏占位元素高度和导航栏保持一致
+            $(ele_nav).prev().css({ 'height': $(ele_nav).outerHeight() });
             // 遍历页面虚拟坐标,并为其添加index
             $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
                 $(element).addClass('hidden_nav');
@@ -59,21 +61,22 @@
             // 监听滚动事件
             $(window).scroll(function () {
                 var top = $(window).scrollTop();
-                if (top >= ($(ele_nav).prev().outerHeight() + $(ele_nav).prev().offset().top)) {
-                    $(ele_nav).css({ 'position': 'fixed', 'top': '0', 'z-index': 99 });
-                    self.temlist.map(function (value, index, arr) {
+                if ($(ele_nav).parent().offset().top <= top) {
+                    $(ele_nav).css({ 'position': 'fixed', 'z-index': 99 });
+                    for (let [index, value] of self.temlist.entries()) {
                         if (value <= top + $(ele_nav).outerHeight()) {
-                            if (index != arr.length - 1) {
+                            if (index != self.temlist.length - 1) {
                                 if (self.temlist[index + 1] > top + $(ele_nav).outerHeight()) {
                                     $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
+                                    break;
                                 }
                             } else {
                                 $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
                             }
                         }
-                    });
+                    }
                 } else {
-                    $(ele_nav).css({ 'position': 'relative', 'top': 'auto', 'z-index': 9 });
+                    $(ele_nav).css({ 'position': 'absolute', 'z-index': 9 });
                     $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
                 }
                 _this.onScrollLevel(ele_nav, ele_width);
@@ -85,19 +88,9 @@
                 var obj = $(this);
                 var temlocation;
                 if (obj.attr('data-navIndex') == 0) {
-                    temlocation = 0;
+                    temlocation = $(ele_nav).parent().offset().top;
                 } else {
-                    self.lastActiveIndex = $('.linkActive').eq(0).attr('data-navIndex');
-                    if (self.lastActiveIndex == 0 && $(window).scrollTop() <= ($(ele_nav).prev().outerHeight() + $(ele_nav).prev().offset().top)) {
-                        self.temlist = [];
-                        $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
-                            self.temlist.push($(element).offset().top);
-                        });
-                        // *3:原先nav存在文档流中,滑动以后nav脱离了文档流,底下的内容顶上但是要滑到相同的位置所以*2,又因为nav固定在顶部遮挡了内容所以*3(猜的)
-                        temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() * 3 + 5;
-                    } else {
-                        temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() + 5;
-                    }
+                    temlocation = self.temlist[Number(obj.attr('data-navIndex'))] - $(ele_nav).outerHeight() + 5;
                 }
                 var timer = setTimeout(function () {
                     $('body,html').stop().animate({
