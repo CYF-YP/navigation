@@ -15,14 +15,19 @@
     
     导航栏的class和id最好固定为以下示例,尤其是class
 ```
-<div class="nav_bar" id="nav_bar">
-    <div class="nav_bar_content">
-        <a class="nav_bar_item linkActive">index-1</a>
-        <a class="nav_bar_item">index-2</a>
-        <a class="nav_bar_item">index-3</a>
-        <a class="nav_bar_item">index-4</a>
-        <a class="nav_bar_item">index-5</a>
-        <a class="nav_bar_item">index-6</a>
+<div class="nav_container">
+    <!-- 导航栏占位元素 -->
+    <div class="nav_placeholder"></div>
+    <!-- 导航栏 -->
+    <div class="nav_bar" id="nav_bar">
+        <div class="nav_bar_content">
+            <a class="nav_bar_item linkActive">index-1</a>
+            <a class="nav_bar_item">index-2</a>
+            <a class="nav_bar_item">index-3</a>
+            <a class="nav_bar_item">index-4</a>
+            <a class="nav_bar_item">index-5</a>
+            <a class="nav_bar_item">index-6</a>
+        </div>
     </div>
 </div>
 ```
@@ -35,8 +40,9 @@ var nav = new navigation({
 });
 ```
 ###### navigation.css说明
+    .nav_container    /* 导航栏外层class */
     .nav_bar    /* 导航栏class */
-    .nav_bar_content    /* 导航栏内层容器class */
+    .nav_bar_content    /* 导航栏内层class */
     .nav_bar_item    /* 导航项class */
     .linkActive    /* 当前项class */
 ###### navigation.js说明
@@ -46,16 +52,12 @@ var nav = new navigation({
     监听滚动事件,滚动过导航条所在位置时改变导航条position
     通过自定义属性data-navIndex记录页面内容的位置,滚动至该位置时导航栏通过查找相对应的自定义属性data-navIndex滚动至可视区域
     
-    导航项绑定点击事件,再次获取页面内容位置, 通过自定义属性data-navIndex得到页面内容位置并滚动到相应位置
+    导航项绑定点击事件, 通过自定义属性data-navIndex得到页面内容位置并滚动到相应位置
 ### 4.思考
     代码好多地方冗余,有机会再优化
-    
-    导航栏及对应位置的计算有些地方是靠尝试和猜测得到的需要梳理清楚
     
     节流、防抖啥的还没了解,后续再作考虑
     
     pc的导航感觉用侧边导航更合适一些,原理也差不多,就不做适配了
-    
-    导航栏整个部分可以考虑外层包裹div,利用一个空的div占位,导航内容设置position: absolute;滑动出可视范围时设置position: fixed;既可以防止高度塌陷,用户在视觉上也不会看到页面抖动,在计算上也比较好处理(考虑优化)
     
     总之 , 等 待 优 化!!!!
