@@ -33,12 +33,10 @@
             $(ele_nav).children().eq(0).find('.nav_bar_item').each(function (index, element) {
                 $(element).attr('data-navIndex', index);
             });
-            // 监听滚动事件,更新虚拟坐标位置
-            $(window).scroll(function () {
-                self.temlist = [];
-                $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
-                    self.temlist.push($(element).offset().top);
-                });
+            // 保存虚拟坐标位置
+            self.temlist = [];
+            $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
+                self.temlist.push($(element).offset().top);
             });
         },
         // 导航栏水平滑动
@@ -60,6 +58,12 @@
             var _this = this;
             // 监听滚动事件
             $(window).scroll(function () {
+                // 更新虚拟坐标位置
+                self.temlist = [];
+                $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
+                    self.temlist.push($(element).offset().top);
+                });
+
                 var top = $(window).scrollTop();
                 if ($(ele_nav).parent().offset().top <= top) {
                     $(ele_nav).css({ 'position': 'fixed', 'z-index': 99 });
