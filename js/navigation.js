@@ -13,15 +13,15 @@
         self.container = document.querySelector(self.container) || document.querySelectorAll(self.container);
         self.ele_width = self.ele_width;
 
-        self.navInit(self.nav_bar, self.container, window);
-        self.onScrollVertical(self.nav_bar, self.ele_width, window);
-        self.navClick(self.nav_bar, self.container, window);
+        self.navInit(self.nav_bar, self.container);
+        self.onScrollVertical(self.nav_bar, self.ele_width, self.container, window);
+        self.navClick(self.nav_bar);
     }
 
     // 原型链上提供的方法
     navigation.prototype = {
         // 导航栏初始设置
-        navInit: function (ele_nav, ele_container, window) {
+        navInit: function (ele_nav, ele_container) {
             // 导航栏占位元素高度和导航栏保持一致
             $(ele_nav).prev().css({ 'height': $(ele_nav).outerHeight() });
             // 遍历页面虚拟坐标,并为其添加index
@@ -54,40 +54,53 @@
             }
         },
         // 内容竖直方向滑动
-        onScrollVertical: function (ele_nav, ele_width, window) {
+        onScrollVertical: function (ele_nav, ele_width, ele_container, window) {
             var _this = this;
+            var scrollTimer = null;
+            var oldTop = $(window).scrollTop();
+            var top = $(window).scrollTop();
             // 监听滚动事件
-            $(window).scroll(function () {
-                // 更新虚拟坐标位置
-                self.temlist = [];
-                $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
-                    self.temlist.push($(element).offset().top);
-                });
+            $(window).scroll(function rollEvent() {
+                if (scrollTimer) {
+                    clearTimeout(scrollTimer);
+                }
+                top = $(window).scrollTop();
+                if (top === oldTop) {
+                    // 更新虚拟坐标位置
+                    self.temlist = [];
+                    $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
+                        self.temlist.push($(element).offset().top);
+                    });
 
-                var top = $(window).scrollTop();
-                if ($(ele_nav).parent().offset().top <= top) {
-                    $(ele_nav).css({ 'position': 'fixed', 'z-index': 99 });
-                    for (let [index, value] of self.temlist.entries()) {
-                        if (value <= top + $(ele_nav).outerHeight()) {
-                            if (index != self.temlist.length - 1) {
-                                if (self.temlist[index + 1] > top + $(ele_nav).outerHeight()) {
+                    if ($(ele_nav).parent().offset().top <= top) {
+                        $(ele_nav).css({ 'position': 'fixed', 'z-index': 99 });
+                        for (let [index, value] of self.temlist.entries()) {
+                            if (value <= top + $(ele_nav).outerHeight()) {
+                                if (index != self.temlist.length - 1) {
+                                    if (self.temlist[index + 1] > top + $(ele_nav).outerHeight()) {
+                                        $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
+                                        break;
+                                    }
+                                } else {
                                     $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
-                                    break;
                                 }
-                            } else {
-                                $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
                             }
                         }
+                    } else {
+                        $(ele_nav).css({ 'position': 'absolute', 'z-index': 9 });
+                        $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
                     }
+                    _this.onScrollLevel(ele_nav, ele_width);
                 } else {
-                    $(ele_nav).css({ 'position': 'absolute', 'z-index': 9 });
-                    $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
+                    oldTop = top;
+                    scrollTimer = setTimeout(() => {
+                        rollEvent();
+                    }, 100);
                 }
-                _this.onScrollLevel(ele_nav, ele_width);
             });
         },
         // 导航栏按钮点击事件
-        navClick: function (ele_nav, ele_container, window) {
+        navClick: function (ele_nav) {
             $(ele_nav).children().eq(0).find('.nav_bar_item').on('click', function () {
                 var obj = $(this);
                 var temlocation;
