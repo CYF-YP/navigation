@@ -57,8 +57,9 @@
         onScrollVertical: function (ele_nav, ele_width, ele_container, window) {
             var _this = this;
             var scrollTimer = null;
-            var oldTop = $(window).scrollTop();
             var top = $(window).scrollTop();
+        // 一
+            var oldTop = $(window).scrollTop();
             // 监听滚动事件
             $(window).scroll(function rollEvent() {
                 if (scrollTimer) {
@@ -98,6 +99,42 @@
                     }, 100);
                 }
             });
+
+        // 二
+            // $(window).scroll(function () {
+            //     clearTimeout(scrollTimer);
+            //     scrollTimer = setTimeout(() => {
+            //         console.log('111');
+            //         // 更新虚拟坐标位置
+            //         self.temlist = [];
+            //         $(ele_container).find('div[data-anchor="true"]').each(function (index, element) {
+            //             self.temlist.push($(element).offset().top);
+            //         });
+
+            //         top = $(window).scrollTop();
+            //         if ($(ele_nav).parent().offset().top <= top) {
+            //             $(ele_nav).css({ 'position': 'fixed', 'z-index': 99 });
+            //             for (let [index, value] of self.temlist.entries()) {
+            //                 if (value <= top + $(ele_nav).outerHeight()) {
+            //                     if (index != self.temlist.length - 1) {
+            //                         if (self.temlist[index + 1] > top + $(ele_nav).outerHeight()) {
+            //                             $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
+            //                             break;
+            //                         }
+            //                     } else {
+            //                         $($(ele_nav).children().eq(0).find('.nav_bar_item')[index]).addClass('linkActive').siblings().removeClass('linkActive');
+            //                     }
+            //                 }
+            //             }
+            //         } else {
+            //             $(ele_nav).css({ 'position': 'absolute', 'z-index': 9 });
+            //             $($(ele_nav).children().eq(0).find('.nav_bar_item')[0]).addClass('linkActive').siblings().removeClass('linkActive');
+            //         }
+            //         _this.onScrollLevel(ele_nav, ele_width);
+            //     });
+            // });
+        // 一和二感觉差不多,但是一的定时器时间设置的长用户体验不好,时间设置的短又感觉有点违和
+
         },
         // 导航栏按钮点击事件
         navClick: function (ele_nav) {
